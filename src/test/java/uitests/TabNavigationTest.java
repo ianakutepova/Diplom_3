@@ -1,10 +1,13 @@
 package uitests;
+import base.BaseTest;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import pages.MainPage;
 
-public class TabNavigationTest extends BaseTest{
+import static org.junit.Assert.assertTrue;
+
+public class TabNavigationTest extends BaseTest {
 
     private MainPage mainPage;
 
@@ -15,6 +18,8 @@ public class TabNavigationTest extends BaseTest{
         mainPage = new MainPage(driver);
         mainPage.clickSaucesButton();
         mainPage.clickBunButton();
+
+        assertTrue(driver.findElement(MainPage.activeBunButton).isDisplayed());
     }
 
         @Test
@@ -24,6 +29,7 @@ public class TabNavigationTest extends BaseTest{
             mainPage = new MainPage(driver);
             mainPage.clickSaucesButton();
 
+        assertTrue(driver.findElement(MainPage.activeSaucesButton).isDisplayed());
         }
 
         @Test
@@ -33,5 +39,7 @@ public class TabNavigationTest extends BaseTest{
             mainPage = new MainPage(driver);
             mainPage.clickFillingsButton();
 
+            assertTrue(driver.findElement(MainPage.activeFillingsButton).isDisplayed());
         }
 }
+

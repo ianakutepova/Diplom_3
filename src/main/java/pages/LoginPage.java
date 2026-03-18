@@ -26,6 +26,9 @@ public class LoginPage {
     static final By signInButton = By.xpath(".//button[contains(@class, 'button_button_type_primary__1O7Bx')]");
     //Локатор кнопки "Восстановить пароль"
     static final By recoverPasswordButton = By.xpath("//a[@class='Auth_link__1fOlj' and text()='Восстановить пароль']");
+    //Локатор заголовка страницы авторизации
+    public static final By loginPageHeader = By.xpath("//h2[text()='Вход']");
+
 
     @Step("Заполнение поля email")
     public void enterSignInEmail(String email) {
@@ -43,16 +46,22 @@ public class LoginPage {
 
     @Step("Клик по ссылке Зарегистрироваться")
     public void clickSignInButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton));
         driver.findElement(signInButton).click();
     }
 
     @Step("Клик по ссылке Зарегистрироваться")
     public void clickStartRegistrationLink() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.elementToBeClickable(startRegistrationLink));
         driver.findElement(startRegistrationLink).click();
     }
 
     @Step("Клик по ссылке Восстановить пароль")
     public void clickRecoverPasswordButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.elementToBeClickable(recoverPasswordButton));
         driver.findElement(recoverPasswordButton).click();
     }
 

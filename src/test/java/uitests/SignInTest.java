@@ -1,5 +1,7 @@
 package uitests;
 
+import base.BaseTest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
@@ -13,6 +15,7 @@ import pages.MainPage;
 import pages.RegistrationPage;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 import static pages.MainPage.logIntoAccountButton;
 import static pages.MainPage.personalAccountButton;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,60 +34,36 @@ public class SignInTest extends BaseTest {
     private String accessToken;
 
     @Before
-    public void setUp() {
+    public void setUp() throws JsonProcessingException {
         mainPage = new MainPage(super.driver);
         loginPage = new LoginPage(super.driver);
         registrationPage = new RegistrationPage(super.driver);
         forgotPasswordPage = new ForgotPasswordPage(super.driver);
 
-        RestAssured.baseURI = "https://stellarburgers.education-services.ru/";
         faker = new Faker();
 
         userEmail = (faker.name().lastName() + faker.regexify("[0-9]{4}") + "@example.com").toLowerCase();
         userPassword = faker.regexify("[a-zA-Z0-9]{6,}");
-        createUserViaApi();
-
+        try {
+            accessToken = createUserViaApi(userEmail, userPassword, "UserName");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void createUserViaApi() {
-
-        String requestBody = String.format(
-                "{\"email\": \"%s\", " +
-                        "\"password\": \"%s\"," +
-                        "\"name\": \"%s\"}",
-                userEmail, userPassword, faker.name().firstName()
-        );
-
-        System.out.println("Email: " + userEmail);
-        System.out.println("Password: " + userPassword);
-
-        accessToken = given()
-                .log().all()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when()
-                .post("/api/auth/register")
-                .then()
-                .log().all()
-                .statusCode(200)
-                .body("accessToken", notNullValue())
-                .extract().path("accessToken");
-    }
 
     @Test
     @DisplayName("Вход по кнопке Войти в аккаунт")
     @Description("Проверка возможности входа по кнопке «Войти в аккаунт» на главной странице")
     public void testSignInLogIntoAccountButtonSuccess() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(logIntoAccountButton));
-
         mainPage.clickLogIntoAccountButton();
         loginPage.enterSignInEmail(userEmail);
         loginPage.enterSignInPassword(userPassword);
         loginPage.clickSignInButton();
-        mainPage.checkPlaceAnOrderButton();
-        cleanUpUser();
+
+        assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
+
     }
 
     @Test
@@ -92,15 +71,13 @@ public class SignInTest extends BaseTest {
     @Description("Проверка возможности входа по кнопке Личный кабинет на главной странице")
     public void testSignInPersonalAccountButtonSuccess() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(personalAccountButton));
-
         mainPage.clickPersonalAccountButton();
         loginPage.enterSignInEmail(userEmail);
         loginPage.enterSignInPassword(userPassword);
         loginPage.clickSignInButton();
-        mainPage.checkPlaceAnOrderButton();
-        cleanUpUser();
+
+        assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
+
     }
 
     @Test
@@ -108,16 +85,15 @@ public class SignInTest extends BaseTest {
     @Description("Проверка возможности входа по кнопке Войти элемента Уже зарегистрированы? Войти")
     public void testSignInRegFormSignInButtonSuccess() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(personalAccountButton));
-
         mainPage.clickLogIntoAccountButton();
         loginPage.clickStartRegistrationLink();
         registrationPage.clickAlreadyRegSignInButton();
         loginPage.enterSignInEmail(userEmail);
         loginPage.enterSignInPassword(userPassword);
         loginPage.clickSignInButton();
-        mainPage.checkPlaceAnOrderButton();
+
+        assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
+
     }
 
     @Test
@@ -130,9 +106,9 @@ public class SignInTest extends BaseTest {
         loginPage.enterSignInEmail(userEmail);
         loginPage.enterSignInPassword(userPassword);
         loginPage.clickSignInButton();
-        mainPage.checkPlaceAnOrderButton();
-    }
 
+        assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
+    }
 
 }
 

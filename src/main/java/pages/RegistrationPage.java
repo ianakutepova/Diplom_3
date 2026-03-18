@@ -3,6 +3,7 @@ package pages;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,6 +25,8 @@ public class RegistrationPage {
     static final By finishRegistrationButton = By.xpath("//button[text()='Зарегистрироваться']");
     //Локатор кнопки "Войти" на элементе "Уже зарегистрированы?"
     static final By alreadyRegSignInButton = By.xpath("//a[@class='Auth_link__1fOlj' and text()='Войти']");
+    //Локатор сообщения с предупреждением о неверной длине пароля
+    public static final By incorrectPasswordWarningElement = By.xpath("//p[@class='input__error text_type_main-default'][text()='Некорректный пароль']");
 
     public RegistrationPage(WebDriver driver) {
         this.driver = driver;
@@ -84,9 +87,8 @@ public class RegistrationPage {
 
     public void checkIncorrectPasswordWarningElement() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[@class='input__error text_type_main-default'][text()='Некорректный пароль']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(incorrectPasswordWarningElement));
     }
 
+    }
 
-
-}

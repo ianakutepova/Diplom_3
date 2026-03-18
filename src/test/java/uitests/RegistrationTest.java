@@ -1,5 +1,6 @@
 package uitests;
 
+import base.BaseTest;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.http.ContentType;
@@ -13,7 +14,9 @@ import pages.RegistrationPage;
 import java.time.Duration;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertTrue;
 import static pages.MainPage.personalAccountButton;
+import static pages.RegistrationPage.incorrectPasswordWarningElement;
 
 public class RegistrationTest extends BaseTest {
     MainPage mainPage;
@@ -32,13 +35,12 @@ public class RegistrationTest extends BaseTest {
     @Description("Проверка успешной регистрации пользователя при заполнении обязательных полей и длине пароля 6=< символов")
     public void testRegistrationSuccessfully() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.elementToBeClickable(personalAccountButton));
         mainPage.clickPersonalAccountButton();
         loginPage.clickStartRegistrationLink();
         registrationPage.setRegFormWithCorrectPassword();
         registrationPage.clickFinishRegistrationButton();
         loginPage.waitOnLoginPage();
+        assertTrue(driver.findElement(LoginPage.loginPageHeader).isDisplayed());
 
     }
 
@@ -47,24 +49,11 @@ public class RegistrationTest extends BaseTest {
     @Description("Проверка предупреждения о некорректной длине пароля при вводе в поле Пароль <6 символов")
     public void testIncorrectPasswordRegistrationError() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.elementToBeClickable(personalAccountButton));
         mainPage.clickPersonalAccountButton();
         loginPage.clickStartRegistrationLink();
         registrationPage.setRegFormWIthIncorrectPassword();
         registrationPage.clickFinishRegistrationButton();
         registrationPage.checkIncorrectPasswordWarningElement();
+        assertTrue(driver.findElement(RegistrationPage.incorrectPasswordWarningElement).isDisplayed());
     }
-
-    public void cleanUpUser() {
-        if (accessToken != null) {
-            given()
-                    .contentType(ContentType.JSON)
-                    .header("Authorization", accessToken)
-                    .when()
-                    .delete("/api/auth/user")
-                    .then()
-                    .statusCode(202);
-        }
     }
-}

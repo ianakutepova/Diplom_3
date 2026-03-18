@@ -27,11 +27,21 @@ public class MainPage {
     public static final By placeAnOrderButton = By.xpath(".//button[contains(@class, 'button_button_type_primary__1O7Bx')]");
 
     //Локатор вкладки булки
-    private final By bunButton = By.xpath(".//div[span[text()='Булки']]");
+    public final By bunButton = By.xpath(".//div[span[text()='Булки']]");
     //Локатор вкладки соусы
-    private final By saucesButton = By.xpath(".//div[span[text()='Соусы']]");
+    public final By saucesButton = By.xpath(".//div[span[text()='Соусы']]");
     //Локатор вкладки начинки
-    private final By fillingsButton = By.xpath(".//div[span[text()='Начинки']]");
+    public final By fillingsButton = By.xpath(".//div[span[text()='Начинки']]");
+
+    // Локатор активной кнопки "Булки"
+    public static final By activeBunButton = By.xpath(".//div[contains(@class, 'tab_tab_type_current__2BEPc') and span[text()='Булки']]");
+
+    // Локатор активной кнопки "Соусы"
+    public static final By activeSaucesButton = By.xpath(".//div[contains(@class, 'tab_tab_type_current__2BEPc') and span[text()='Соусы']]");
+
+    // Локатор активной кнопки "Начинки"
+    public static final By activeFillingsButton = By.xpath(".//div[contains(@class, 'tab_tab_type_current__2BEPc') and span[text()='Начинки']]");
+
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -46,6 +56,8 @@ public class MainPage {
 
     @Step("Клик по ссылке Войти в аккаунт")
     public void clickLogIntoAccountButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.elementToBeClickable(logIntoAccountButton));
         driver.findElement(logIntoAccountButton).click();
     }
 
@@ -55,19 +67,21 @@ public class MainPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(placeAnOrderButton));
     }
 
-    public MainPage clickBunButton() {
+    public void clickBunButton() {
         driver.findElement(bunButton).click();
-        return new MainPage(driver);
+        new MainPage(driver);
     }
 
-    public MainPage clickSaucesButton() {
+    public void clickSaucesButton() {
         driver.findElement(saucesButton).click();
-        return new MainPage(driver);
+        new MainPage(driver);
     }
 
-    public MainPage clickFillingsButton() {
+    public void clickFillingsButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(fillingsButton));
         driver.findElement(fillingsButton).click();
-        return new MainPage(driver);
+        new MainPage(driver);
     }
 
 }
