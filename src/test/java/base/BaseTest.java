@@ -1,6 +1,6 @@
 package uitests;
 
-import baseUI.WebDriverCreator;
+import util.WebDriverCreator;
 import io.restassured.http.ContentType;
 import org.junit.After;
 import org.junit.Before;
