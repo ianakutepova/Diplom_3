@@ -16,9 +16,7 @@ public class TabNavigationTest extends BaseTest {
     @Description("Проверка возможности перехода в раздел Булки")
     public void openCatalogBunsTest() {
         mainPage = new MainPage(driver);
-        mainPage.clickSaucesButton();
-        mainPage.clickBunButton();
-
+        MainPage.clickBunButton();
         assertTrue(driver.findElement(MainPage.activeBunButton).isDisplayed());
     }
 
@@ -27,7 +25,7 @@ public class TabNavigationTest extends BaseTest {
         @Description("Проверка возможности перехода в раздел Соусы")
         public void openCatalogSaucesTest() {
             mainPage = new MainPage(driver);
-            mainPage.clickSaucesButton();
+            MainPage.clickSaucesButton();
 
         assertTrue(driver.findElement(MainPage.activeSaucesButton).isDisplayed());
         }
@@ -37,7 +35,7 @@ public class TabNavigationTest extends BaseTest {
         @Description("Проверка возможности перехода в раздел Начинки")
         public void openCatalogFillingsTest() {
             mainPage = new MainPage(driver);
-            mainPage.clickFillingsButton();
+            MainPage.clickFillingsButton();
 
             assertTrue(driver.findElement(MainPage.activeFillingsButton).isDisplayed());
         }

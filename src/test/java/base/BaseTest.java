@@ -41,6 +41,7 @@ public class BaseTest {
 
         return given()
                 .contentType(ContentType.JSON)
+                .log().all()
                 .body(jsonString)
                 .when()
                 .post(BASE_URL + REGISTER_URL)

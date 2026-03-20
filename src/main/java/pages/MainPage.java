@@ -2,7 +2,9 @@ package pages;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,27 +13,29 @@ import java.time.Duration;
 
 public class MainPage {
 
-    WebDriver driver;
+    static WebDriver driver;
 
     public WebDriver getDriver() {
         return driver;
     }
 
     //Локатор кнопки "Личный кабинет"
-    public static final By personalAccountButton = By.xpath(".//p[text()='Личный Кабинет']");
+    public static final By personalAccountButton = By.xpath(".//p[contains(@class, 'AppHeader_header__linkText__3q_va') and text()='Личный Кабинет']");
 
     //Локатор кнопки "Войти в аккаунт"
-    public static final By logIntoAccountButton = By.xpath(".//button[contains(@class, 'button_button_type_primary')]");
+    public static final By logIntoAccountButton = By.xpath(".//button[contains(@class, 'button_button_type_primary__1O7Bx') and text()='Войти в аккаунт']");
+
 
     //Локатор кнопки "Оформить заказ"
     public static final By placeAnOrderButton = By.xpath(".//button[contains(@class, 'button_button_type_primary__1O7Bx')]");
 
     //Локатор вкладки булки
-    public final By bunButton = By.xpath(".//div[span[text()='Булки']]");
+    public static final By bunButton = By.xpath(".//div[span[text()='Булки']]");
+
     //Локатор вкладки соусы
-    public final By saucesButton = By.xpath(".//div[span[text()='Соусы']]");
+    public static final By saucesButton = By.xpath(".//div[span[text()='Соусы']]");
     //Локатор вкладки начинки
-    public final By fillingsButton = By.xpath(".//div[span[text()='Начинки']]");
+    public static final By fillingsButton = By.xpath(".//div[span[text()='Начинки']]");
 
     // Локатор активной кнопки "Булки"
     public static final By activeBunButton = By.xpath(".//div[contains(@class, 'tab_tab_type_current__2BEPc') and span[text()='Булки']]");
@@ -48,14 +52,14 @@ public class MainPage {
     }
 
     @Step("Клик по ссылке Личный кабинет")
-    public void clickPersonalAccountButton() {
+    public static void clickPersonalAccountButton() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.elementToBeClickable(personalAccountButton));
         driver.findElement(personalAccountButton).click();
     }
 
     @Step("Клик по ссылке Войти в аккаунт")
-    public void clickLogIntoAccountButton() {
+    public static void clickLogIntoAccountButton() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.elementToBeClickable(logIntoAccountButton));
         driver.findElement(logIntoAccountButton).click();
@@ -67,17 +71,26 @@ public class MainPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(placeAnOrderButton));
     }
 
-    public void clickBunButton() {
-        driver.findElement(bunButton).click();
+    @Step("Клик по вкладке Булки")
+    public static void clickBunButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.elementToBeClickable(bunButton));
+        WebElement bunButtonElement = driver.findElement(bunButton);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", bunButtonElement);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", bunButtonElement);
         new MainPage(driver);
     }
 
-    public void clickSaucesButton() {
+    @Step("Клик по вкладке Соусы")
+    public static void clickSaucesButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(saucesButton));
         driver.findElement(saucesButton).click();
         new MainPage(driver);
     }
 
-    public void clickFillingsButton() {
+    @Step("Клик по вкладке Начинки")
+    public static void clickFillingsButton() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(fillingsButton));
         driver.findElement(fillingsButton).click();

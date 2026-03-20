@@ -3,7 +3,6 @@ package pages;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,7 +11,7 @@ import java.time.Duration;
 
 public class RegistrationPage {
 
-    private WebDriver driver;
+    private static WebDriver driver;
     static Faker faker = new Faker();
 
     // Локатор поля ввода имени
@@ -33,7 +32,7 @@ public class RegistrationPage {
     }
 
     @Step("Заполнение формы регистрации")
-    public void setRegFormWithCorrectPassword() {
+    public static void setRegFormWithCorrectPassword() {
         String name = faker.name().fullName();
         String email = faker.internet().emailAddress();
         String correctPassword = faker.regexify("[a-zA-Z0-9]{6,}"); // Корректный пароль, соответствует регулярному выражению
@@ -45,37 +44,37 @@ public class RegistrationPage {
 
 
     @Step("Заполнение имени")
-    public void enterName(String name) {
+    public static void enterName(String name) {
         WebElement nameFieldElement = driver.findElement(nameField);
         nameFieldElement.click();
         nameFieldElement.sendKeys(name);
     }
 
     @Step("Заполнение email")
-    public void enterEmail(String email) {
+    public static void enterEmail(String email) {
         WebElement emailFieldElement = driver.findElement(emailField);
         emailFieldElement.click();
         emailFieldElement.sendKeys(email);
     }
 
     @Step("Заполнение пароля")
-    public void enterPassword(String password) {
+    public static void enterPassword(String password) {
         WebElement passwordFieldElement = driver.findElement(passwordField);
         passwordFieldElement.click();
         passwordFieldElement.sendKeys(password);
     }
 
     @Step("Клик по кнопке Зарегистрироваться")
-    public void clickFinishRegistrationButton() {
+    public static void clickFinishRegistrationButton() {
         driver.findElement(finishRegistrationButton).click();
     }
 
     @Step("Клик по кнопке Уже зарегистрированы? Войти")
-    public void clickAlreadyRegSignInButton() {
+    public static void clickAlreadyRegSignInButton() {
         driver.findElement(alreadyRegSignInButton).click();
     }
 
-    public void setRegFormWIthIncorrectPassword() {
+    public static void setRegFormWIthIncorrectPassword() {
         String name = faker.name().fullName();
         String email = faker.internet().emailAddress();
         String incorrectPassword = faker.regexify("[a-zA-Z0-9]{1,5}"); // Некорректный пароль, меньше 6 символов
@@ -85,7 +84,7 @@ public class RegistrationPage {
         enterPassword(incorrectPassword);
     }
 
-    public void checkIncorrectPasswordWarningElement() {
+    public static void checkIncorrectPasswordWarningElement() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.visibilityOfElementLocated(incorrectPasswordWarningElement));
     }

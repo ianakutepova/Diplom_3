@@ -1,26 +1,18 @@
 package uitests;
 
 import base.BaseTest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.junit.Before;
 import org.junit.Test;
 import pages.ForgotPasswordPage;
 import pages.LoginPage;
 import pages.MainPage;
 import pages.RegistrationPage;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.notNullValue;
+
 import static org.junit.Assert.assertTrue;
-import static pages.MainPage.logIntoAccountButton;
-import static pages.MainPage.personalAccountButton;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import java.time.Duration;
+
 
 public class SignInTest extends BaseTest {
 
@@ -34,7 +26,7 @@ public class SignInTest extends BaseTest {
     private String accessToken;
 
     @Before
-    public void setUp() throws JsonProcessingException {
+    public void setUp() {
         mainPage = new MainPage(super.driver);
         loginPage = new LoginPage(super.driver);
         registrationPage = new RegistrationPage(super.driver);
@@ -44,11 +36,7 @@ public class SignInTest extends BaseTest {
 
         userEmail = (faker.name().lastName() + faker.regexify("[0-9]{4}") + "@example.com").toLowerCase();
         userPassword = faker.regexify("[a-zA-Z0-9]{6,}");
-        try {
-            accessToken = createUserViaApi(userEmail, userPassword, "UserName");
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+
     }
 
 
@@ -57,10 +45,10 @@ public class SignInTest extends BaseTest {
     @Description("Проверка возможности входа по кнопке «Войти в аккаунт» на главной странице")
     public void testSignInLogIntoAccountButtonSuccess() {
 
-        mainPage.clickLogIntoAccountButton();
-        loginPage.enterSignInEmail(userEmail);
-        loginPage.enterSignInPassword(userPassword);
-        loginPage.clickSignInButton();
+        MainPage.clickLogIntoAccountButton();
+        LoginPage.enterSignInEmail(userEmail);
+        LoginPage.enterSignInPassword(userPassword);
+        LoginPage.clickSignInButton();
 
         assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
 
@@ -71,10 +59,10 @@ public class SignInTest extends BaseTest {
     @Description("Проверка возможности входа по кнопке Личный кабинет на главной странице")
     public void testSignInPersonalAccountButtonSuccess() {
 
-        mainPage.clickPersonalAccountButton();
-        loginPage.enterSignInEmail(userEmail);
-        loginPage.enterSignInPassword(userPassword);
-        loginPage.clickSignInButton();
+        MainPage.clickPersonalAccountButton();
+        LoginPage.enterSignInEmail(userEmail);
+        LoginPage.enterSignInPassword(userPassword);
+        LoginPage.clickSignInButton();
 
         assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
 
@@ -85,12 +73,12 @@ public class SignInTest extends BaseTest {
     @Description("Проверка возможности входа по кнопке Войти элемента Уже зарегистрированы? Войти")
     public void testSignInRegFormSignInButtonSuccess() {
 
-        mainPage.clickLogIntoAccountButton();
-        loginPage.clickStartRegistrationLink();
-        registrationPage.clickAlreadyRegSignInButton();
-        loginPage.enterSignInEmail(userEmail);
-        loginPage.enterSignInPassword(userPassword);
-        loginPage.clickSignInButton();
+        MainPage.clickLogIntoAccountButton();
+        LoginPage.clickStartRegistrationLink();
+        RegistrationPage.clickAlreadyRegSignInButton();
+        LoginPage.enterSignInEmail(userEmail);
+        LoginPage.enterSignInPassword(userPassword);
+        LoginPage.clickSignInButton();
 
         assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
 
@@ -100,12 +88,12 @@ public class SignInTest extends BaseTest {
     @DisplayName("Вход через кнопку в форме восстановления пароля")
     @Description("Проверка возможности входа по кнопке Войти элемента Вспомнили пароль? Войти")
     public void testSignInPasswordResetPageSignInButtonSuccess() {
-        mainPage.clickLogIntoAccountButton();
-        loginPage.clickRecoverPasswordButton();
-        forgotPasswordPage.clickRememberedPasswordSignInButton();
-        loginPage.enterSignInEmail(userEmail);
-        loginPage.enterSignInPassword(userPassword);
-        loginPage.clickSignInButton();
+        MainPage.clickLogIntoAccountButton();
+        LoginPage.clickRecoverPasswordButton();
+        ForgotPasswordPage.clickRememberedPasswordSignInButton();
+        LoginPage.enterSignInEmail(userEmail);
+        LoginPage.enterSignInPassword(userPassword);
+        LoginPage.clickSignInButton();
 
         assertTrue(driver.findElement(MainPage.placeAnOrderButton).isDisplayed());
     }
